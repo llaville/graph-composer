@@ -11,7 +11,7 @@ use Clue\GraphComposer\Graph\GraphComposer;
 
 class Export extends Command
 {
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('export')
              ->setDescription('Export dependency graph image for given project directory')
@@ -20,11 +20,10 @@ class Export extends Command
 
              // add output format option. default value MUST NOT be given, because default is to overwrite with output extension
              ->addOption('format', null, InputOption::VALUE_REQUIRED, 'Image format (svg, png, jpeg)'/*, 'svg'*/)
-
-           /*->addOption('dev', null, InputOption::VALUE_NONE, 'If set, Whether require-dev dependencies should be shown') */;
+        ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $graph = new GraphComposer($input->getArgument('dir'));
 
