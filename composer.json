@@ -39,9 +39,11 @@
         "post-install-cmd": [
             "@composer bin all install --ansi"
         ],
+        "phar:build": "vendor/bin/box compile",
         "tests:unit": "vendor/bin/phpunit --configuration phpunit.xml.dist"
     },
     "scripts-descriptions" : {
+        "phar:build": "Compile PHAR version with BOX",
         "tests:unit": "Run unit tests"
     },
     "bin": [ "bin/graph-composer" ]
