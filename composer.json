@@ -38,7 +38,11 @@
         ],
         "post-install-cmd": [
             "@composer bin all install --ansi"
-        ]
+        ],
+        "tests:unit": "vendor/bin/phpunit --configuration phpunit.xml.dist"
+    },
+    "scripts-descriptions" : {
+        "tests:unit": "Run unit tests"
     },
     "bin": [ "bin/graph-composer" ]
 }

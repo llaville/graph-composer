@@ -234,14 +234,14 @@ Happy hacking!
 To run the test suite, you first need to clone this repo and then install all
 dependencies [through Composer](https://getcomposer.org):
 
-```bash
-$ composer install
+```shell
+composer install
 ```
 
 To run the test suite, go to the project root and run:
 
-```bash
-$ php vendor/bin/phpunit
+```shell
+composer tests:unit
 ```
 
 ## License
