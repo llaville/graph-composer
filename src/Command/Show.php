@@ -22,8 +22,17 @@ class Show extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $graph = new GraphComposer($input->getArgument('dir'));
-        $graph->setFormat($input->getOption('format'));
+        $dir = $input->getArgument('dir');
+        if (!is_string($dir)) {
+            return 1;
+        }
+        $format = $input->getOption('format');
+        if (!is_string($format)) {
+            return 1;
+        }
+
+        $graph = new GraphComposer($dir);
+        $graph->setFormat($format);
         $graph->displayGraph();
 
         return 0;

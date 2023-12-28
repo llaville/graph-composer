@@ -19,16 +19,20 @@ class Export extends Command
              ->addArgument('output', InputArgument::OPTIONAL, 'Path to output image file')
 
              // add output format option. default value MUST NOT be given, because default is to overwrite with output extension
-             ->addOption('format', null, InputOption::VALUE_REQUIRED, 'Image format (svg, png, jpeg)'/*, 'svg'*/)
+             ->addOption('format', null, InputOption::VALUE_REQUIRED, 'Image format (svg, png, jpeg)')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $graph = new GraphComposer($input->getArgument('dir'));
+        $dir = $input->getArgument('dir');
+        if (!is_string($dir)) {
+            return 1;
+        }
+        $graph = new GraphComposer($dir);
 
         $target = $input->getArgument('output');
-        if ($target !== null) {
+        if (is_string($target)) {
             if (is_dir($target)) {
                 $target = rtrim($target, '/') . '/graph-composer.svg';
             }
@@ -42,13 +46,13 @@ class Export extends Command
         }
 
         $format = $input->getOption('format');
-        if ($format !== null) {
+        if (is_string($format)) {
             $graph->setFormat($format);
         }
 
         $path = $graph->getImagePath();
 
-        if ($target !== null) {
+        if (is_string($target)) {
             rename($path, $target);
         } else {
             readfile($path);
