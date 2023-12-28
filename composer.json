@@ -9,7 +9,7 @@
         "clue/graph": "^0.9.3",
         "graphp/graphviz": "^0.2.2",
         "jms/composer-deps-analyzer": "^1.0.1",
-        "symfony/console": "^6.4"
+        "symfony/console": "^6.4 || ^7.0"
     },
     "require-dev": {
         "bamarni/composer-bin-plugin": "^1.8"
