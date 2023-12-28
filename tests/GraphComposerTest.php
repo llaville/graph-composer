@@ -7,8 +7,9 @@ use PHPUnit\Framework\TestCase;
 
 class GraphVizMockDisplay extends GraphViz
 {
-    public $called = 0;
-    public function display(Graph $graph)
+    public int $called = 0;
+
+    public function display(Graph $graph): void
     {
         ++$this->called;
     }
@@ -16,8 +17,9 @@ class GraphVizMockDisplay extends GraphViz
 
 class GraphVizMockCreateImageFile extends GraphViz
 {
-    public $called = 0;
-    public function createImageFile(Graph $graph)
+    public int $called = 0;
+
+    public function createImageFile(Graph $graph): string
     {
         return 'test' . ++$this->called . '.png';
     }
@@ -25,8 +27,9 @@ class GraphVizMockCreateImageFile extends GraphViz
 
 class GraphVizMockSetFormat extends GraphViz
 {
-    public $called = null;
-    public function setFormat($format)
+    public ?string $called = null;
+
+    public function setFormat($format): void
     {
         $this->called = $format;
     }
