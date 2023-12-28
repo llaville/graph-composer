@@ -6,7 +6,7 @@
 
 Graph visualization for your project's `composer.json` and its dependencies:
 
-![dependency graph for clue/graph-composer](https://cloud.githubusercontent.com/assets/776829/11199047/46dd4dd2-8cca-11e5-845f-cbe485764f56.png)
+![dependency graph for clue/graph-composer](graph-composer.svg)
 
 **Table of contents**
 
@@ -29,8 +29,8 @@ Once clue/graph-composer is [installed](#install), you can use it via command li
 The `show` command creates a dependency graph for the given project path and opens
 the default desktop image viewer for you:
 
-```bash
-$ php graph-composer.phar show ~/path/to/your/project
+```shell
+php graph-composer.phar show ~/path/to/your/project
 ```
 
 *   It accepts an optional argument which is the path to your project directory or composer.json file
@@ -44,8 +44,8 @@ $ php graph-composer.phar show ~/path/to/your/project
 The `export` command works very much like the `show` command, but instead of opening your
 default image viewer, it will write the resulting graph to STDOUT or into an image file:
 
-```bash
-$ php graph-composer.phar export ~/path/to/your/project
+```shell
+php graph-composer.phar export ~/path/to/your/project
 ```
 
 *   It accepts an optional argument which is the path to your project directory or composer.json file
@@ -55,15 +55,15 @@ $ php graph-composer.phar export ~/path/to/your/project
     Its file extension
     also sets the image format (unless you also explicitly pass the `--format` option). Example call:
 
-    ```bash
-    $ php graph-composer.phar export ~/path/to/your/project export.png
+    ```shell
+    php graph-composer.phar export ~/path/to/your/project export.png
     ```
 
     If this argument is not given, it defaults to writing to STDOUT, which may
     be useful for scripting purposes:
 
-    ```bash
-    $ php graph-composer.phar export ~/path/to/your/project | base64
+    ```shell
+    php graph-composer.phar export ~/path/to/your/project | base64
     ```
 
 *   You may optionally pass an `--format=[svg/svgz/png/jpeg/...]` option to set
@@ -83,8 +83,8 @@ The [Graphviz homepage](https://www.graphviz.org/download/) includes complete
 installation instructions for most common platforms, users of Debian/Ubuntu-based
 distributions may simply invoke:
 
-```bash
-$ sudo apt install graphviz
+```shell
+sudo apt install graphviz
 ```
 
 ### As a phar (recommended)
@@ -96,29 +96,29 @@ You can simply download the latest `graph-composer.phar` file from our
 The [latest release](https://github.com/clue/graph-composer/releases/latest) can
 always be downloaded like this:
 
-```bash
-$ curl -JOL https://clue.engineering/graph-composer-latest.phar
+```shell
+curl -JOL https://clue.engineering/graph-composer-latest.phar
 ```
 
 That's it already. Once downloaded, you can verify everything works by running this:
 
-```bash
-$ cd ~/Downloads
-$ php graph-composer.phar --version
+```shell
+cd ~/Downloads
+php graph-composer.phar --version
 ```
 
 > If you prefer a global (system-wide) installation without having to type the `.phar` extension
 each time, you may simply invoke:
 > 
-> ```bash
-> $ chmod +x graph-composer.phar
-> $ sudo mv graph-composer.phar /usr/local/bin/graph-composer
+> ```shell
+> chmod +x graph-composer.phar
+> sudo mv graph-composer.phar /usr/local/bin/graph-composer
 > ```
 >
 > You can verify everything works by running:
 > 
-> ```bash
-> $ graph-composer --version
+> ```shell
+> graph-composer --version
 > ```
 
 There's no separate `update` procedure, simply download the latest release again
@@ -133,26 +133,26 @@ This method also requires PHP 5.3+, GraphViz and, of course, Composer.
 
 You can either modify your `composer.json` manually or run the following command to include the latest tagged release:
 
-```bash
-$ composer require --dev clue/graph-composer
+```shell
+composer require --dev clue/graph-composer
 ```
 
 Now you should be able to invoke the following command in your project root:
 
-```bash
-$ ./vendor/bin/graph-composer show
+```shell
+./vendor/bin/graph-composer show
 ```
 
 Alternatively, you can install this globally for your user by running:
 
-```bash
-$ composer global require clue/graph-composer
+```shell
+composer global require clue/graph-composer
 ```
 
 Now, assuming you have `~/.composer/vendor/bin` in your path, you can invoke the following command:
 
-```bash
-$ graph-composer show ~/path/to/your/project
+```shell
+graph-composer show ~/path/to/your/project
 ```
 
 > Note: You should only invoke and rely on the main graph-composer bin file.
@@ -175,51 +175,44 @@ and use [Composer](https://getcomposer.org) to download its dependencies.
 Therefore you'll need PHP, Composer, GraphViz, git and curl installed.
 For example, on a recent Ubuntu/debian system, simply run:
 
-```bash
-$ sudo apt install php7.2-cli git curl graphviz
+```shell
+sudo apt install php7.2-cli git curl graphviz
 
-$ git clone https://github.com/clue/graph-composer.git
-$ cd graph-composer
+git clone https://github.com/clue/graph-composer.git
+cd graph-composer
 
-$ curl -s https://getcomposer.org/installer | php
-$ sudo mv composer.phar /usr/local/bin/composer
+curl -s https://getcomposer.org/installer | php
+sudo mv composer.phar /usr/local/bin/composer
 
-$ composer install
+composer install
 ```
 
 You can now verify everything works by running clue/graph-composer like this:
 
-```bash
-$ php bin/graph-composer show
+```shell
+php bin/graph-composer show
 ```
 
 If you want to distribute clue/graph-composer as a single standalone release file, you may
-compile the project into a single `graph-composer.phar` file like this:
+compile the project into a single `graph-composer.phar` file with the [BOX](https://github.com/box-project/box) project,
+like this:
 
-```bash
-$ composer build
+```shell
+composer phar:build
 ```
-
-> Note that compiling will temporarily install a copy of this project to the
-  local `build/` directory and install all non-development dependencies
-  for distribution. This should only take a second or two if you've previously
-  installed its dependencies already.
-  The build script optionally accepts the version number (`VERSION` env) and
-  an output file name or will otherwise try to look up the last release tag,
-  such as `graph-composer-1.0.0.phar`.
 
 You can now verify the resulting `graph-composer.phar` file works by running it
 like this:
 
-```bash
-$ ./graph-composer.phar --version
+```shell
+./graph-composer.phar --version
 ```
 
 To update your development version to the latest version, just run this:
 
-```bash
-$ git pull
-$ php composer.phar install
+```shell
+git pull
+php composer.phar install
 ```
 
 Made some changes to your local development version?
