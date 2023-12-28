@@ -53,12 +53,7 @@ class GraphComposer
         $this->graphviz = $graphviz;
     }
 
-    /**
-     *
-     * @param string $dir
-     * @return \Fhaculty\Graph\Graph
-     */
-    public function createGraph()
+    public function createGraph(): Graph
     {
         $graph = new Graph();
 
