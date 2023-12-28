@@ -39,10 +39,12 @@
         "post-install-cmd": [
             "@composer bin all install --ansi"
         ],
+        "code:check": "vendor/bin/phpstan analyse --configuration phpstan.neon.dist --ansi",
         "phar:build": "vendor/bin/box compile",
         "tests:unit": "vendor/bin/phpunit --configuration phpunit.xml.dist"
     },
     "scripts-descriptions" : {
+        "code:check": "Run PHPStan code analysis on Graph-Composer source code",
         "phar:build": "Compile PHAR version with BOX",
         "tests:unit": "Run unit tests"
     },
