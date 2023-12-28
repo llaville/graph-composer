@@ -14,12 +14,13 @@ class Export extends Command
     protected function configure(): void
     {
         $this->setName('export')
-             ->setDescription('Export dependency graph image for given project directory')
-             ->addArgument('dir', InputArgument::OPTIONAL, 'Path to project directory to scan', '.')
-             ->addArgument('output', InputArgument::OPTIONAL, 'Path to output image file')
+            ->setDescription('Export dependency graph image for given project directory')
+            ->addArgument('dir', InputArgument::OPTIONAL, 'Path to project directory to scan', '.')
+            ->addArgument('output', InputArgument::OPTIONAL, 'Path to output image file')
 
-             // add output format option. default value MUST NOT be given, because default is to overwrite with output extension
-             ->addOption('format', null, InputOption::VALUE_REQUIRED, 'Image format (svg, png, jpeg)')
+            // add output format option. default value MUST NOT be given, because default is to overwrite with output extension
+            ->addOption('format', null, InputOption::VALUE_REQUIRED, 'Image format (svg, png, jpeg)')
+            ->addOption('depth', null, InputOption::VALUE_REQUIRED, 'Set the maximum depth of dependency graph', PHP_INT_MAX)
         ;
     }
 
@@ -29,7 +30,7 @@ class Export extends Command
         if (!is_string($dir)) {
             return 1;
         }
-        $graph = new GraphComposer($dir);
+        $graph = new GraphComposer($dir, null, $input->getOption('depth'));
 
         $target = $input->getArgument('output');
         if (is_string($target)) {
