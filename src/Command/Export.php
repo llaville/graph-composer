@@ -2,6 +2,7 @@
 
 namespace Clue\GraphComposer\Command;
 
+use Graphp\GraphViz\GraphViz;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Command\Command;
@@ -21,6 +22,7 @@ class Export extends Command
             // add output format option. default value MUST NOT be given, because default is to overwrite with output extension
             ->addOption('format', null, InputOption::VALUE_REQUIRED, 'Image format (svg, png, jpeg)')
             ->addOption('depth', null, InputOption::VALUE_REQUIRED, 'Set the maximum depth of dependency graph', PHP_INT_MAX)
+            ->addOption('orientation', null, InputOption::VALUE_REQUIRED, 'Set the direction of graph layout', 'TB')
         ;
     }
 
@@ -30,7 +32,15 @@ class Export extends Command
         if (!is_string($dir)) {
             return 1;
         }
-        $graph = new GraphComposer($dir, null, $input->getOption('depth'));
+
+        $graphviz = new GraphViz();
+        $graphviz->setFormat('svg');
+
+        $depth = $input->getOption('depth');
+
+        $graphComposer = new GraphComposer($dir, $graphviz, intval($depth));    // @phpstan-ignore-line
+        $graph = $graphComposer->createGraph();
+        $graph->setAttribute('graphviz.graph.rankdir', $input->getOption('orientation'));
 
         $target = $input->getArgument('output');
         if (is_string($target)) {
@@ -42,16 +52,16 @@ class Export extends Command
             $pos = strrpos($filename, '.');
             if ($pos !== false && isset($filename[$pos + 1])) {
                 // extension found and not empty
-                $graph->setFormat(substr($filename, $pos + 1));
+                $graphComposer->setFormat(substr($filename, $pos + 1));
             }
         }
 
         $format = $input->getOption('format');
         if (is_string($format)) {
-            $graph->setFormat($format);
+            $graphComposer->setFormat($format);
         }
 
-        $path = $graph->getImagePath();
+        $path = $graphviz->createImageFile($graph);
 
         if (is_string($target)) {
             rename($path, $target);

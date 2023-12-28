@@ -5,6 +5,7 @@ namespace Clue\GraphComposer\Graph;
 use Fhaculty\Graph\Attribute\AttributeAware;
 use Fhaculty\Graph\Attribute\AttributeBagNamespaced;
 use Fhaculty\Graph\Graph;
+use Fhaculty\Graph\Vertex;
 use Graphp\GraphViz\GraphViz;
 use JMS\Composer\DependencyAnalyzer;
 use JMS\Composer\Graph\DependencyGraph;
@@ -58,9 +59,9 @@ class GraphComposer
     private int $maxDepth;
 
     public function __construct(
-        $dir,
+        string $dir,
         GraphViz $graphviz = null,
-        $maxDepth = PHP_INT_MAX
+        int $maxDepth = PHP_INT_MAX
     ) {
         if ($graphviz === null) {
             $graphviz = new GraphViz();
@@ -107,13 +108,17 @@ class GraphComposer
         return $this->graphviz->createImageFile($graph);
     }
 
+    /**
+     * @param array<string, Vertex> $drawnPackages
+     * @param array<string, string|int> $layoutVertex
+     */
     private function drawPackageNode(
         Graph $graph,
         PackageNode $packageNode,
         array &$drawnPackages,
         array $layoutVertex = null,
-        $depth = 0
-    ) {
+        int $depth = 0
+    ): ?Vertex {
         $name = $packageNode->getName();
         // ensure that packages are only drawn once
         // if two packages in the tree require a package twice
@@ -131,6 +136,7 @@ class GraphComposer
             $layoutVertex = $this->layoutVertex;
         }
 
+        // @phpstan-ignore-next-line
         $vertex = $drawnPackages[$name] = $graph->createVertex($name, true);
 
         $label = $name;
@@ -162,7 +168,6 @@ class GraphComposer
 
         return $vertex;
     }
-
 
     public function setFormat(string $format): static
     {
