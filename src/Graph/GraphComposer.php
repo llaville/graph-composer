@@ -46,9 +46,9 @@ class GraphComposer
 
     private DependencyGraph $dependencyGraph;
 
-    private ?GraphViz $graphviz;
+    private GraphViz $graphviz;
 
-    public function __construct(string $dir, ?GraphViz $graphviz = null)
+    public function __construct(string $dir, GraphViz $graphviz = null)
     {
         if ($graphviz === null) {
             $graphviz = new GraphViz();
