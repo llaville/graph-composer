@@ -2,10 +2,8 @@
 
 namespace Clue\GraphComposer\Graph;
 
-use Fhaculty\Graph\Attribute\AttributeAware;
-use Fhaculty\Graph\Attribute\AttributeBagNamespaced;
-use Fhaculty\Graph\Graph;
-use Fhaculty\Graph\Vertex;
+use Graphp\Graph\Graph;
+use Graphp\Graph\Vertex;
 use Graphp\GraphViz\GraphViz;
 use JMS\Composer\DependencyAnalyzer;
 use JMS\Composer\Graph\DependencyGraph;
@@ -58,6 +56,8 @@ class GraphComposer
      */
     private int $maxDepth;
 
+    private Graph $graph;
+
     public function __construct(
         string $dir,
         GraphViz $graphviz = null,
@@ -72,26 +72,16 @@ class GraphComposer
         $this->dependencyGraph = $analyzer->analyze($dir);
         $this->graphviz = $graphviz;
         $this->maxDepth = $maxDepth;
+
+        $this->graph = new Graph();
     }
 
     public function createGraph(): Graph
     {
-        $graph = new Graph();
-
-        $drawnPackages = array();
         $rootPackage = $this->dependencyGraph->getRootPackage();
-        $this->drawPackageNode($graph, $rootPackage, $drawnPackages, $this->layoutVertexRoot);
+        $this->drawPackageNode($rootPackage, $this->layoutVertexRoot);
 
-        return $graph;
-    }
-
-    /**
-     * @param array<string, string|int> $layout
-     */
-    private function setLayout(AttributeAware $entity, array $layout): void
-    {
-        $bag = new AttributeBagNamespaced($entity->getAttributeBag(), 'graphviz.');
-        $bag->setAttributes($layout);
+        return $this->graph;
     }
 
     public function displayGraph(): void
@@ -109,16 +99,15 @@ class GraphComposer
     }
 
     /**
-     * @param array<string, Vertex> $drawnPackages
      * @param array<string, string|int> $layoutVertex
      */
     private function drawPackageNode(
-        Graph $graph,
         PackageNode $packageNode,
-        array &$drawnPackages,
-        array $layoutVertex = null,
+        ?array $layoutVertex = null,
         int $depth = 0
     ): ?Vertex {
+        static $drawnPackages = [];
+
         $name = $packageNode->getName();
         // ensure that packages are only drawn once
         // if two packages in the tree require a package twice
@@ -136,14 +125,16 @@ class GraphComposer
             $layoutVertex = $this->layoutVertex;
         }
 
-        // @phpstan-ignore-next-line
-        $vertex = $drawnPackages[$name] = $graph->createVertex($name, true);
+        $vertex = $drawnPackages[$name] = $this->graph->createVertex(['id' => $name]);
 
         $label = $name;
         if ($packageNode->getVersion()) {
             $label .= ': ' .$packageNode->getVersion();
         }
-        $this->setLayout($vertex, array('label' => $label) + $layoutVertex);
+
+        foreach (array('label' => $label) + $layoutVertex as $key => $value) {
+            $vertex->setAttribute('graphviz.' . $key, $value);
+        }
 
         // this foreach will loop over the dependencies of the current package
         foreach ($packageNode->getOutEdges() as $dependency) {
@@ -153,16 +144,18 @@ class GraphComposer
                 continue;
             }
 
-            $targetVertex = $this->drawPackageNode($graph, $dependency->getDestPackage(), $drawnPackages, null, $depth + 1);
+            $targetVertex = $this->drawPackageNode($dependency->getDestPackage(), null, $depth + 1);
 
             // drawPackageNode will return null if the package should not be shown
             // also the dependencies of a package will be only drawn if max depth is not reached
             // this ensures that packages in a deeper level will not have any dependency
             if ($targetVertex && $depth < $this->maxDepth) {
                 $label = $dependency->getVersionConstraint();
-                $edge = $vertex->createEdgeTo($targetVertex);
                 $layoutEdge = $dependency->isDevDependency() ? $this->layoutEdgeDev : $this->layoutEdge;
-                $this->setLayout($edge, array('label' => $label) + $layoutEdge);
+                $edge = $this->graph->createEdgeDirected($vertex, $targetVertex);
+                foreach (array('label' => $label) + $layoutEdge as $key => $value) {
+                    $edge->setAttribute('graphviz.' . $key, $value);
+                }
             }
         }
 

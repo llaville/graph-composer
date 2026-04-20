@@ -1,7 +1,7 @@
 <?php
 
 use Clue\GraphComposer\Graph\GraphComposer;
-use Fhaculty\Graph\Graph;
+use Graphp\Graph\Graph;
 use Graphp\GraphViz\GraphViz;
 use PHPUnit\Framework\TestCase;
 
@@ -44,7 +44,7 @@ class GraphComposerTest extends TestCase
         $graphComposer = new GraphComposer($dir);
         $graph = $graphComposer->createGraph();
 
-        $this->assertInstanceOf('Fhaculty\Graph\Graph', $graph);
+        $this->assertInstanceOf('Graphp\Graph\Graph', $graph);
         $this->assertTrue(count($graph->getVertices()) > 0);
     }
 

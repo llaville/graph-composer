@@ -40,6 +40,7 @@ class Export extends Command
 
         $graphComposer = new GraphComposer($dir, $graphviz, intval($depth));    // @phpstan-ignore-line
         $graph = $graphComposer->createGraph();
+        //\var_dump($graph);
         $graph->setAttribute('graphviz.graph.rankdir', $input->getOption('orientation'));
 
         $target = $input->getArgument('output');
@@ -67,6 +68,11 @@ class Export extends Command
             rename($path, $target);
         } else {
             readfile($path);
+        }
+
+        if ($output->isVerbose()) {
+            $graphStatement = $graphviz->createScript($graph);
+            echo $graphStatement;
         }
 
         return 0;
