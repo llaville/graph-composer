@@ -60,7 +60,7 @@ class GraphComposer
 
     public function __construct(
         string $dir,
-        GraphViz $graphviz = null,
+        ?GraphViz $graphviz = null,
         int $maxDepth = PHP_INT_MAX
     ) {
         if ($graphviz === null) {
