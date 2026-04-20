@@ -8,19 +8,24 @@ on:
 jobs:
   PHPUnit:
     name: PHPUnit (PHP ${{ matrix.php }})
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
-        php:
-          - 8.3
-          - 8.2
-          - 8.1
+        include:
+          - php: 8.2
+            tools: phpunit:11.5
+          - php: 8.3
+            tools: phpunit:12.5
+          - php: 8.4
+            tools: phpunit:13
+          - php: 8.5
+            tools: phpunit:13
     steps:
-      - uses: actions/checkout@v4
-      - uses: shivammathur/setup-php@v2
+      - uses: actions/checkout@v6.0.2
+      - uses: shivammathur/setup-php@2.37.0
         with:
           php-version: ${{ matrix.php }}
           coverage: xdebug
+          tools: ${{ matrix.tools }}
       - run: composer install
-      - run: vendor/bin/phpunit --coverage-text
-      - run: composer phar:build
+      - run: phpunit --coverage-text
