@@ -10,7 +10,9 @@ class App extends BaseApplication
     {
         parent::__construct('clue/graph-composer', '@dev');
 
-        $this->add(new Command\Show());
-        $this->add(new Command\Export());
+        $this->addCommands([
+            new Command\Show(),
+            new Command\Export(),
+        ]);
     }
 }
