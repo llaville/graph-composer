@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.x-dev (2026-04-20)
+
+- Compatibility with https://github.com/graphp/graph/tree/1.x components
+- Compatibility with Symfony Components 7.4 LTS and 8.0
+- Compatibility with PHP 8.2 or greater
+- Add option (`--depth` flag) to limit depth of the graph : see https://github.com/clue/graph-composer/issues/33
+- Add option (`--orientation` flag) to change graph orientation
+- Allow to display Graph Statements when invoking export command with verbose mode (at least level 1)
+
 ## 1.1.0 (2020-03-26)
 
 *   Feature: Forward compatibility with symfony/console v5, v4, v3 and legacy v2.

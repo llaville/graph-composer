@@ -4,6 +4,11 @@
 [![downloads on GitHub](https://img.shields.io/github/downloads/clue/graph-composer/total?color=blue&label=downloads%20on%20GitHub)](https://github.com/clue/graph-composer/releases)
 [![installs on Packagist](https://img.shields.io/packagist/dt/clue/graph-composer?color=blue&label=installs%20on%20Packagist)](https://packagist.org/packages/clue/graph-composer)
 
+> [!IMPORTANT]
+>
+> What's make the difference between original project and this fork ?
+> See [`CHANGELOG.md`](CHANGELOG.md#2x-dev-2026-04-20)  file, 2.x-dev section.
+
 Graph visualization for your project's `composer.json` and its dependencies:
 
 ![dependency graph for clue/graph-composer](graph-composer.svg)
